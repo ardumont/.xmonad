@@ -1,0 +1,2 @@
+#+title: My .xmonad rebuildable
+#+author: ardumont

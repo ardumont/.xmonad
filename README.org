@@ -1,2 +1,24 @@
 #+title: My .xmonad rebuildable
 #+author: ardumont
+
+* Dependencies
+
+Debian based platform:
+#+BEGIN_SRC shell
+sudo apt-get install stack
+#+END_SRC
+
+* How
+
+#+BEGIN_SRC shell
+ln -nsf /path/to/.xmonad ~/
+cd ~/.xmonad
+stack exec xmonad -- --recompile
+stack exec xmonad -- --restart
+#+END_SRC
+
+* Emacs (haskell-mode)
+
+Open ~/.xmonad/xmonad.hs, `C-c C-l` away to check the types.
+
+This will spawn a repl using stack-ghci or fail if it ain't happy!

@@ -139,9 +139,9 @@ xephyrQuery = appName =? ".Xephyr-wrapped" <&&> className =? "Xephyr"
 -- | My keymap as (prefix keybindings, command description, command)
 --
 myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
-myKeymapWithDescription home conf @(XConfig { terminal   = myTerm
-                                            , layoutHook = myLayoutHook
-                                            , workspaces = myWss}) =
+myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
+                                           , layoutHook = myLayoutHook
+                                           , workspaces = myWss}) =
   [ (prefix "C-g"       , "abort"                      , spawn "xdotool key Escape")
   , (prefix "M1-c"      , "mouse-click-at-point"       , spawn "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
@@ -170,7 +170,7 @@ myKeymapWithDescription home conf @(XConfig { terminal   = myTerm
   , (prefix "S-p"       , "chat"                       , runOrRaiseNext "pidgin"                   (className =? "Pidgin"))
   , (prefix "S-a"       , "android"                    , runOrRaiseNext "android"                  (className =? "Android SDK Manager"))
   , (prefix "S-d"       , "android-emulator"           , runOrRaiseNext "android"                  (className =? ".emulator64-arm-wrapped"))
-  , (prefix "S-s"       , "desktop-settings"           , runOrRaiseNext "cinnamon-settings"        (className =? "Cinnamon-settings.py"))
+  , (prefix "S-s"       , "sweethome-3d"               , runOrRaiseNext "sweethome3d"              (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
   , (prefix "S-t"       , "vlc"                        , runOrRaiseNext "vlc"                      vlcQuery)
   , (prefix "C-e"       , "pdf-reader"                 , runOrRaiseNext myPdfReader                (myPdfReaderQuery myPdfReader))
   , (prefix "C-i"       , "image-viewer"               , runOrRaiseNext "eog"                      (className =? "Eog"))
@@ -208,8 +208,8 @@ myKeymapWithDescription home conf @(XConfig { terminal   = myTerm
   , (prefix "C-S-i"     , "sbin-ifconfig"              , spawnZenityCmd "/sbin/ifconfig")
   , (prefix "S-b"       , "acpi"                       , spawnZenityCmd "acpi -b")
   , (prefix "^"         , "top"                        , spawnZenityCmd "top -b -n 1 -c -d 1")
-  , (prefix "C-s"       , "print-screen"               , spawn "scrot -u $HOME/Pictures/screenshots/$(date +%F_%H-%M-%S).png")
-  , (prefix "M1-s"      , "mouse-print-screen"         , spawn "~/bin/touchpad/toggle-touchpad-manual.sh 1; scrot -s $HOME/Pictures/screenshots/$(date +%F_%H-%M-%S).png")
+  , (prefix "C-s"       , "print-screen"               , spawn "screenshot=\"$HOME/Pictures/screenshots/$(date +%F_%H-%M-%S).png\" ; scrot -u $screenshot; notify-send -t 1000 \"$(basename $screenshot) done!\"")
+  , (prefix "M1-s"      , "mouse-print-screen"         , spawn "~/bin/touchpad/toggle-touchpad-manual.sh 1; screenshot=\"$HOME/Pictures/screenshots/$(date +%F_%H-%M-%S).png\" ; scrot -s $screenshot; notify-send -t 1000 \"$(basename $screenshot) done!\"")
   , (prefix "C-t"       , "toggle-touchpad"            , spawn "~/bin/touchpad/toggle-touchpad.sh")
   , (prefix "C-S-s"     , "suspend"                    , spawn "systemctl suspend")
   , (prefix "C-S-h"     , "hibernate"                  , spawn "systemctl hibernate")
@@ -232,10 +232,11 @@ myKeymapWithDescription home conf @(XConfig { terminal   = myTerm
   , (prefix "p"         , "pass-read"                  , passPrompt myXPConfig)
   , (prefix "C-p"       , "pass-generate"              , passGeneratePrompt myXPConfig)
   , (prefix "C-S-p"     , "pass-generate"              , passRemovePrompt myXPConfig)
-  , (prefix "c"         , "close-current-window"       , kill >> spawn "notify-send 'window closed!'")
+  , (prefix "c"         , "close-current-window"       , kill >> spawn "notify-send -t 1000 'window closed!'")
   , (prefix "<Space>"   , "rotate-layout"              , sendMessage NextLayout)
   , (prefix "C-<Space>" , "reset-layout"               , setLayout myLayoutHook)
-  , (prefix "M1-n"      , "refresh"                    , refresh)
+  -- , (prefix "M1-n"      , "refresh"                    , refresh)
+  , (prefix "M1-n"      , "window-goto"                , windowPromptGoto def)
   , (prefix "C-M1-b"    , "banish-mouse"               , spawn "~/bin/mouse/banish-mouse.sh")
   , (prefix "<Tab>"     , "window-move-focus-next"     , windows W.focusDown)
   , (prefix "j"         , "window-move-focus-next"     , windows W.focusDown)
@@ -249,8 +250,8 @@ myKeymapWithDescription home conf @(XConfig { terminal   = myTerm
   , (prefix "t"         , "window-push-back-tiling"    , withFocused $ windows . W.sink)
   , (prefix "h"         , "window-inc-num-master-area" , sendMessage (IncMasterN 1))
   , (prefix "l"         , "window-dec-num-master-area" , sendMessage (IncMasterN (-1)))
-  , (prefix "C-S-q"     , "xmonad-recompile"           , spawn "stack exec xmonad -- --recompile && notify-send 'XMonad recompiled!'")
-  , (prefix "S-q"       , "xmonad-restart"             , spawn "stack exec xmonad -- --restart && notify-send 'XMonad Restarted!'")
+  , (prefix "C-S-q"     , "xmonad-recompile"           , spawn "stack exec xmonad -- --recompile && notify-send -t 1000 'XMonad recompiled!'")
+  , (prefix "S-q"       , "xmonad-restart"             , spawn "stack exec xmonad -- --restart && notify-send -t 1000 'XMonad Restarted!'")
   , (prefix "M1-q"      , "xmonad-quit"                , io exitSuccess)] ++
   -- M1-n   - Switch to workspace with id n
   -- S-n    - Move the client to workspace with id n

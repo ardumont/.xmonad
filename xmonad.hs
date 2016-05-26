@@ -56,6 +56,14 @@ myBrowser = "firefox"
 myBrowserQuery :: Query Bool
 myBrowserQuery = appName =? "Navigator" <&&> (className =? "Firefox" <||> className =? "Tor Browser" <||> className =? "Iceweasel")
 
+-- | VM query
+--
+vmQuery :: Query Bool
+vmQuery = (appName =? "qemu-system-x86_64" <&&> className =? "qemu-system-x86_64") <||>
+          (appName =? "Qt-subapplication" <&&> className =? "VirtualBox") <||>
+          className =? ".emulator64-arm-wrapped"  <||>
+          className =? "Android SDK Manager"
+
 -- | My preferential emacs
 --
 myEmacsQuery :: Query Bool
@@ -183,7 +191,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "n"         , "nautilus"                   , runOrRaiseNext "nautilus"                 (appName =? "nautilus" <&&> className =? "Nautilus"))
   , (prefix "S-n"       , "thunar"                     , runOrRaiseNext "thunar"                   (className =? "thunar"))
   , (prefix "C-M1-f"    , "filezilla"                  , runOrRaiseNext "filezilla"                (className =? "Filezilla"))
-  , (prefix "C-v"       , "virtualbox"                 , runOrRaiseNext "VirtualBox"               (appName =? "Qt-subapplication" <&&> className =? "VirtualBox"))
+  , (prefix "C-v"       , "virtualbox"                 , runOrRaiseNext "VirtualBox"               vmQuery)
   , (prefix "u"         , "unetbootin"                 , runOrRaiseNext "unetbootin"               (className =? "unetbootin"))
   , (prefix "/"         , "transmission"               , runOrRaiseNext "transmission-gtk" $       (appName =? "transmission-gtk" <&&> className =? "Transmission-gtk") <||> (appName =? ".transmission-gtk-wrapped" <&&> className =? ".transmission-gtk-wrapped"))
   , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "gksudo /usr/sbin/gparted" (className =? "gpartedbin"))
@@ -409,16 +417,13 @@ myManageHook = composeAll
     , appName =? "sun-awt-X11-XFramePeer"         --> doShift workspaceDb
     , skypeQuery                                  --> doShift workspaceIrc
     , className =? "Pidgin"                       --> doShift workspaceIrc
-    , className =? "VirtualBox"                   --> doShift workspaceVM
-    , className =? ".emulator64-arm-wrapped"      --> doShift workspaceDevVM
-    , className =? "Android SDK Manager"          --> doShift workspaceDevVM
+    , vmQuery                                     --> doShift workspaceVM
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
     , appName =? "..key-mon-wrapped-wrapped" <&&>
         className =? "..key-mon-wrapped-wrapped"  --> doIgnore
     , manageMonitor screenKeyMonitor
     ]
-
-------------------------------------------------------------------------
+  ------------------------------------------------------------------------
 -- Event handling
 
 -- * EwmhDesktops users should change this to ewmhDesktopsEventHook

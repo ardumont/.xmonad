@@ -1,4 +1,5 @@
 import           Control.Monad              (liftM)
+import           Data.List                  (sort)
 import qualified Data.Map                   as M
 import           Data.Monoid
 import           System.Directory           (getDirectoryContents,
@@ -354,33 +355,33 @@ myLayout = tiled ||| Mirror tiled ||| Full
 --
 
 workspaceEmacs, workspaceTerminal, workspaceWeb, workspaceCode, workspaceIrc, workspaceIde, workspaceFloat, workspaceBooks, workspaceDb , workspaceVM, workspaceDevVM, workspaceRemote :: String
-workspaceEmacs    = "1:emacs"
-workspaceTerminal = "2:terminal"
-workspaceWeb      = "3:web"
-workspaceCode     = "4:code"
-workspaceIrc      = "5:irc"
-workspaceDb       = "6:db"
-workspaceFloat    = "7:ide"
-workspaceVM       = "8:vm"
-workspaceDevVM    = "9:dev-vm"
+workspaceEmacs    = "01:emacs"
+workspaceTerminal = "02:terminal"
+workspaceWeb      = "03:web"
+workspaceCode     = "04:code"
+workspaceIrc      = "05:irc"
+workspaceDb       = "06:db"
+workspaceFloat    = "07:ide"
+workspaceVM       = "08:vm"
+workspaceDevVM    = "09:dev-vm"
 workspaceBooks    = "10:books"
 workspaceIde      = "11:ide"
 workspaceRemote   = "12:remote"
 
 myWorkspaces :: [String]
-myWorkspaces = [ workspaceEmacs
-               , workspaceTerminal
-               , workspaceWeb
-               , workspaceCode
-               , workspaceIrc
-               , workspaceVM
-               , workspaceDevVM
-               , workspaceIde
-               , workspaceFloat
-               , workspaceBooks
-               , workspaceDb
-               , workspaceRemote
-               ]
+myWorkspaces = sort [ workspaceEmacs
+                    , workspaceTerminal
+                    , workspaceWeb
+                    , workspaceCode
+                    , workspaceIrc
+                    , workspaceVM
+                    , workspaceDevVM
+                    , workspaceIde
+                    , workspaceFloat
+                    , workspaceBooks
+                    , workspaceDb
+                    , workspaceRemote
+                    ]
 
 ------------------------------------------------------------------------
 -- Window rules:

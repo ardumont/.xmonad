@@ -30,7 +30,6 @@ import qualified XMonad.StackSet            as W
 import           XMonad.Util.EZConfig
 import           XMonad.Util.Run            (spawnPipe)
 
-
 -- | The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -267,7 +266,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   [(prefix $ pk ++ k, desc ++ k , windows $ f i) | (i, k) <- zip myWss $ map show [1 .. length myWss]
                                                  , (f, pk, desc) <- [ (W.view  , "M1-", "workspace-keep-screen-switch-to-id-")
                                                                     , (W.shift, "S-" , "workspace-move-client-to-id-")]] ++
-    -- S-M1-n   - Switch to physical/Xinerama screen n
+    -- S-M1-n - Switch to physical/Xinerama screen n
     -- C-M1-n - Move client to screen 1, 2, or 3
     --
   [(prefix $ pk ++ show screenNumber, metaXAction ++ show screenNumber, screenWorkspace screenNumber >>= flip whenJust (windows . fnAction))

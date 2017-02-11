@@ -1,13 +1,11 @@
-import           Control.Monad              (liftM)
+import           Control.Monad              ()
 import           Data.List                  (sort)
 import qualified Data.Map                   as M
 import           Data.Monoid
-import           System.Directory           (getDirectoryContents,
-                                             getHomeDirectory)
+import           System.Directory           (getHomeDirectory)
 import           System.Exit
-import           System.FilePath            (combine, takeBaseName)
+import           System.FilePath            (combine)
 import           System.IO
-import           System.Posix.Env           (getEnv)
 import           XMonad
 import           XMonad.Actions.Promote     (promote)
 import qualified XMonad.Actions.Search      as S

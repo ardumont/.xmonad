@@ -65,8 +65,8 @@ library
                        directory >= 1.2.2.0,
                        filepath >= 1.4.0.0,
                        unix >= 2.7.1.0,
-                       xmonad >= 0.12,
-                       xmonad-contrib >= 0.12
+                       xmonad >= 0.13,
+                       xmonad-contrib >= 0.13
   
   -- Directories containing source files.
   -- hs-source-dirs:      

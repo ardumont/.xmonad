@@ -19,8 +19,7 @@ import           XMonad.Layout.Monitor
 import           XMonad.Layout.NoBorders    (smartBorders)
 import           XMonad.Prompt
 import           XMonad.Prompt.AppLauncher  (launchApp)
-import           XMonad.Prompt.Pass         (passGeneratePrompt, passPrompt,
-                                             passRemovePrompt)
+import           XMonad.Prompt.Pass         (passPrompt)
 import           XMonad.Prompt.RunOrRaise   (runOrRaisePrompt)
 import           XMonad.Prompt.Window
 import           XMonad.Prompt.XMonad       (xmonadPromptC)
@@ -236,8 +235,6 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "g"         , "goto"                       , windowPromptGoto myXPConfig)
   , (prefix "M1-x"      , "meta-x"                     , xmonadPromptC keymapDescription myXPConfig)
   , (prefix "p"         , "pass-read"                  , passPrompt myXPConfig)
-  , (prefix "C-p"       , "pass-generate"              , passGeneratePrompt myXPConfig)
-  , (prefix "C-S-p"     , "pass-generate"              , passRemovePrompt myXPConfig)
   , (prefix "c"         , "close-current-window"       , kill >> spawn "notify-send -t 1000 'window closed!'")
   , (prefix "<Space>"   , "rotate-layout"              , sendMessage NextLayout)
   , (prefix "C-<Space>" , "reset-layout"               , setLayout myLayoutHook)

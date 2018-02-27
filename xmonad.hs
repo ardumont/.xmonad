@@ -168,7 +168,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "i"         , "ide"                        , runOrRaiseNext "idea-community"                               (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "jetbrains-idea-ce"))
   , (prefix "C-d"       , "db-gui"                     , runOrRaiseNext "mysql-workbench"          (appName =? "mysql-workbench-bin" <&&> className =? "Mysql-workbench-bin"))
   -- , (prefix "M1-S-d"    , "db-visualizer"              , runOrRaiseNext "dbvisguisteam"            (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-onseven-dbvis-DbVisualizerGUI"))
-  , (prefix "M1-S-d"    , "pgdmin3"                    , runOrRaiseNext "pgadmin3"                 (appName =? "pgadmin3" <&&> className =? "Pgadmin3"))
+  , (prefix "M1-S-d"    , "pgadmin3"                   , runOrRaiseNext "pgadmin3"                 (appName =? "pgadmin3" <&&> className =? "Pgadmin3"))
   , (prefix "M1-g"      , "steam"                      , runOrRaiseNext "steam"                    (appName =? "Steam" <&&> className =? "Steam"))
   , (prefix "x"         , "terminal"                   , runOrRaiseNext myTerm                     myTerminalQuery)
   , (prefix "C-x"       , "xterm"                      , runOrRaiseNext "xterm"                    (appName =? "xterm" <&&> className =? "XTerm"))

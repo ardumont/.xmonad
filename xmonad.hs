@@ -173,6 +173,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "x"         , "terminal"                   , runOrRaiseNext myTerm                     myTerminalQuery)
   , (prefix "C-x"       , "xterm"                      , runOrRaiseNext "xterm"                    (appName =? "xterm" <&&> className =? "XTerm"))
   , (prefix "S-p"       , "chat"                       , runOrRaiseNext "pidgin"                   (className =? "Pidgin"))
+  , (prefix "C-S-p"     , "digikam"                    , runOrRaiseNext "digikam"                  (appName =? "digikam" <&&> className =? "digikam"))
   , (prefix "S-a"       , "android"                    , runOrRaiseNext "android"                  (className =? "Android SDK Manager"))
   , (prefix "S-d"       , "android-emulator"           , runOrRaiseNext "android"                  (className =? ".emulator64-arm-wrapped"))
   , (prefix "S-s"       , "sweethome-3d"               , runOrRaiseNext "sweethome3d"              (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))

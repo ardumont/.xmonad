@@ -48,10 +48,16 @@ myPdfReaderQuery _ = error "Undefined"
 -- | My preferential browser
 --
 myBrowser :: String
-myBrowser = "firefox"
+myBrowser = "qutebrowser"
+
+firefoxQuery :: Query Bool
+firefoxQuery = appName =? "Navigator" <&&> (className =? "Firefox" <||>
+                                            className =? "Tor Browser" <||>
+                                            className =? "Iceweasel" <||>
+                                            className =? "Firefox-esr")
 
 myBrowserQuery :: Query Bool
-myBrowserQuery = appName =? "Navigator" <&&> (className =? "Firefox" <||> className =? "Tor Browser" <||> className =? "Iceweasel" <||> className =? "Firefox-esr")
+myBrowserQuery = qutebrowserQuery
 
 -- | VM query
 --
@@ -81,8 +87,10 @@ myClickJustFocuses = True
 myBorderWidth :: Dimension
 myBorderWidth  = 2
 
--- | modMask lets you specify which modkey you want to use. mod4mask is window key
--- I'm used to prefix key because of emacs, stumpwm, conkeror and firefox with keysnail
+-- | modMask lets you specify which modkey you want to use. mod4mask
+-- is window key. I'm used to prefix key because of emacs, stumpwm,
+-- xmonad-customed (here), conkeror, firefox with keysnail (rip),
+-- qutebrowser-customed
 --
 myModMask :: KeyMask
 myModMask = mod4Mask

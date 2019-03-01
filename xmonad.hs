@@ -132,6 +132,9 @@ libreOfficeQuery = (appName =? "libreofficedev" <||> appName =? "libreoffice") <
 conkerorQuery :: Query Bool
 conkerorQuery = appName =? "Navigator" <&&> className =? "Conkeror"
 
+qutebrowserQuery :: Query Bool
+qutebrowserQuery = appName =? "qutebrowser" <&&> className =? "qutebrowser"
+
 vlcQuery :: Query Bool
 vlcQuery = appName =? "vlc" <&&> (className =? "vlc" <||> className =? "Vlc")
 
@@ -196,7 +199,8 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "S-f"       , "file-progression"           , runOrRaiseNext ""                         (className =? "file_progress"))
   , (prefix "C-S-x"     , "xosview"                    , runOrRaiseNext "xosview"                  (className =? "xosview"))
   , (prefix "C-S-g"     , "dia"                        , runOrRaiseNext "dia"                      (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
-  , (prefix "b"         , "conkeror"                   , runOrRaiseNext "conkeror"                 conkerorQuery)
+  --, (prefix "b"         , "conkeror"                   , runOrRaiseNext "conkeror"                 conkerorQuery)
+  , (prefix "b"         , "qutebrowser"                , runOrRaiseNext "qutebrowser"              qutebrowserQuery)
   , (prefix "B"         , "baobab"                     , runOrRaiseNext "baobab"                   (appName =? "baobab" <&&> className =? "Baobab"))
   , (prefix "z"         , "gitk"                       , runOrRaiseNext "gitk"                     (className =? "gitk"))
   , (prefix "S-f"       , "fbreader"                   , runOrRaiseNext "fbreader"                 (className =? "fbreader"))

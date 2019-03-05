@@ -70,7 +70,7 @@ vmQuery = (appName =? "qemu-system-x86_64" <&&> className =? "qemu-system-x86_64
 -- | My preferential emacs
 --
 myEmacsQuery :: Query Bool
-myEmacsQuery = appName =? "emacs" <&&> className =? "Emacs"
+myEmacsQuery = (appName =? "emacs" <||> appName =? "_emacs-wrapped") <&&> className =? "Emacs"
 
 -- | Whether focus follows the mouse pointer.
 --

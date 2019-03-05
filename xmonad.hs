@@ -141,7 +141,7 @@ conkerorQuery :: Query Bool
 conkerorQuery = appName =? "Navigator" <&&> className =? "Conkeror"
 
 qutebrowserQuery :: Query Bool
-qutebrowserQuery = appName =? "qutebrowser" <&&> className =? "qutebrowser"
+qutebrowserQuery = (appName =? "qutebrowser" <||> appName =? ".qutebrowser_wrapped") <&&> className =? "qutebrowser"
 
 vlcQuery :: Query Bool
 vlcQuery = appName =? "vlc" <&&> (className =? "vlc" <||> className =? "Vlc")

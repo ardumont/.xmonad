@@ -163,7 +163,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
   , (prefix "M1-w"      , "wifi-connect"               , spawn "~/.local/bin/hWifi")
   , (prefix "C-M1-w"    , "wifi-create-and-connect"    , launchApp myXPConfig "~/.local/bin/hWifi")
-  , (prefix "e"         , "emacs"                      , myRunOrRaise home "bin/emacs/emacs.sh"                        myEmacsQuery)
+  , (prefix "e"         , "emacs"                      , myRunOrRaise home "bin/emacs.sh"                              myEmacsQuery)
   , (prefix "S-x"       , "xephyr"                     , myRunOrRaise home "bin/xephyr/xephyr-stumpwm.sh"              xephyrQuery)
   , (prefix "y"         , "yed"                        , myRunOrRaise home "bin/app/yed.sh"                            (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-install4j-runtime-launcher-Launcher"))
   , (prefix "S-c"       , "lighttable"                 , myRunOrRaise home "applications/LightTable/LightTable"        (className =? "ltbin"))

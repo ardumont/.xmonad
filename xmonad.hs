@@ -199,7 +199,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "C-S-i"     , "sbin-ifconfig"              , spawnZenityCmd home "ifconfig")
   , (prefix "S-b"       , "acpi"                       , spawnZenityCmd home "acpi -b")
   , (prefix "^"         , "top"                        , spawnZenityCmd home "top -b -n 1 -c -d 1")
-  , (prefix "C-t"       , "toggle-touchpad"            , spawn "~/bin/touchpad/toggle-touchpad.sh")
+  , (prefix "C-t"       , "toggle-touchpad"            , spawn "~/bin/toggle-touchpad")
   , (prefix "C-s"       , "print-screen"               , spawn "~/bin/print-screen")
   , (prefix "M1-s"      , "mouse-print-screen"         , spawn "~/bin/print-screen mouse")
   , (prefix "C-S-s"     , "suspend"                    , spawn "systemctl suspend")

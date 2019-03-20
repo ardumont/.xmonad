@@ -188,7 +188,6 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "C-S-g"     , "dia"                        , myRunOrRaise home "dia"                   (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
   -- , (prefix "b"         , "conkeror"                   , myRunOrRaise "conkeror"                   conkerorQuery)
   , (prefix "b"         , "qutebrowser"                , myRunOrRaise home "qutebrowser"           qutebrowserQuery)
-  , (prefix "S-f"       , "fbreader"                   , myRunOrRaise home "fbreader"              (className =? "fbreader"))
   , (prefix "M1-t"      , "tuxguitar"                  , myRunOrRaise home "tuxguitar"             (className =? "TuxGuitar"))
   , (prefix "o"         , "libre-office"               , myRunOrRaise home "libreoffice"           libreOfficeQuery)
   , (prefix "f"         , "browser"                    , myRunOrRaise home myBrowser               myBrowserQuery)

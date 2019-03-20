@@ -111,22 +111,29 @@ prefix = ((prefixKey ++ " ") ++)
 
 -- | Execute a command and show its result in a zenity window dialog
 --
-spawnZenityCmd :: String -> X ()
-spawnZenityCmd = spawn . zenityCmd
-                 where zenityCmd :: String -> String
-                       zenityCmd cmd = "zenity --info --text \"$(" ++ cmd ++ ")\""
+spawnZenityCmd :: String -> String -> X ()
+spawnZenityCmd home =
+  let zenityCmd :: String -> String
+      zenityCmd cmd = zenity ++ " --info --text \"$(" ++ cmd ++ ")\""
+        where zenity = nixProfilePath home ("zenity" :: String)
+  in spawn . zenityCmd
 
--- | Display some data in a zenity window dialog
+-- | Complete the binary path for a nix profile
 --
--- spawnZenityText :: String -> X ()
--- spawnZenityText = spawn . zenityText
---                   where zenityText :: String -> String
---                         zenityText s = "zenity --info --text '" ++ s ++ "'"
+nixProfilePath :: String -> String -> String
+nixProfilePath home cmd = combine home program
+  where nixProfilePath = ".nix-profile/bin/"::String
+        program = combine nixProfilePath cmd
 
 -- | Run or raise with a default config folder from which finding the command
 --
 myRunOrRaise :: String -> String -> Query Bool -> X ()
-myRunOrRaise home cmd = runOrRaiseNext $ combine home cmd
+myRunOrRaise home cmd = runOrRaiseNext $ nixProfilePath home cmd
+
+-- | Spawn command adding the extra nix profile path needed
+--
+mySpawn :: String -> String -> X ()
+mySpawn home cmd = spawn $ nixProfilePath home cmd
 
 libreOfficeQuery :: Query Bool
 libreOfficeQuery = (appName =? "libreofficedev" <||> appName =? "libreoffice") <&&>
@@ -135,7 +142,8 @@ libreOfficeQuery = (appName =? "libreofficedev" <||> appName =? "libreoffice") <
                     className =? "libreofficedev-calc" <||>
                     className =? "libreoffice-calc" <||>
                     className =? "libreofficedev-draw" <||>
-                    className =? "libreoffice-draw")
+                    className =? "libreoffice-draw" <||>
+                    className =? "libreoffice-startcenter")
 
 conkerorQuery :: Query Bool
 conkerorQuery = appName =? "Navigator" <&&> className =? "Conkeror"
@@ -158,56 +166,52 @@ myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
 myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
                                            , layoutHook = myLayoutHook
                                            , workspaces = myWss}) =
-  [ (prefix "C-g"       , "abort"                      , spawn "xdotool key Escape")
-  , (prefix "M1-c"      , "mouse-click-at-point"       , spawn "xdotool click 1")
+  [ (prefix "C-g"       , "abort"                      , mySpawn home "xdotool key Escape")
+  , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
-  , (prefix "e"         , "emacs"                      , myRunOrRaise home "bin/emacs.sh"                              myEmacsQuery)
-  , (prefix "S-c"       , "lighttable"                 , myRunOrRaise home "applications/LightTable/LightTable"        (className =? "ltbin"))
-  , (prefix "C-r"       , "simplescreenrecorder"       , runOrRaiseNext "simplescreenrecorder"                         (appName =? "simplescreenrecorder" <&&> className =? "Simplescreenrecorder"))
-  , (prefix "M1-S-x"    , "mcomix"                     , runOrRaiseNext "mcomix"                                       (appName =? "mcomix" <&&> className =? "MComix"))
+  , (prefix "e"         , "emacs"                      , myRunOrRaise home "emacsclient --create-frame" myEmacsQuery)
+  , (prefix "S-c"       , "lighttable"                 , myRunOrRaise home "light"                         (appName =? "lighttable" <&&> className =? "LightTable"))
+  , (prefix "C-r"       , "simplescreenrecorder"       , myRunOrRaise home "simplescreenrecorder"          (appName =? "simplescreenrecorder" <&&> className =? "Simplescreenrecorder"))
+  , (prefix "M1-S-x"    , "mcomix"                     , myRunOrRaise home "mcomix"                        (appName =? "mcomix" <&&> className =? "MComix"))
   , (prefix prefixKey   , "promote"                    , promote)  -- window manipulation
-  , (prefix "x"         , "terminal"                   , runOrRaiseNext myTerm                     myTerminalQuery)
-  , (prefix "C-x"       , "xterm"                      , runOrRaiseNext "xterm"                    (appName =? "xterm" <&&> className =? "XTerm"))
-  , (prefix "S-s"       , "sweethome-3d"               , runOrRaiseNext "sweethome3d"              (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
-  , (prefix "S-s"       , "signal"                     , runOrRaiseNext "signal-desktop"          (appName =? "signal" <&&> className =? "Signal"))
-  , (prefix "S-t"       , "vlc"                        , runOrRaiseNext "vlc"                      vlcQuery)
-  , (prefix "C-e"       , "pdf-reader"                 , runOrRaiseNext myPdfReader                (myPdfReaderQuery myPdfReader))
-  , (prefix "C-i"       , "image-viewer"               , runOrRaiseNext "feh"                      (className =? "Eog"))
-  , (prefix "d"         , "pinta"                      , runOrRaiseNext "pinta"                    (className =? "Pinta"))
-  , (prefix "C-a"       , "music-reader"               , runOrRaiseNext "audacious"                (className =? "Audacious"))
-  , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (className =? "gpartedbin"))
-  , (prefix "C-S-x"     , "xosview"                    , runOrRaiseNext "xosview"                  (className =? "xosview"))
-  , (prefix "C-S-g"     , "dia"                        , runOrRaiseNext "dia"                      (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
-  -- , (prefix "b"         , "conkeror"                   , runOrRaiseNext "conkeror"                 conkerorQuery)
-  , (prefix "b"         , "qutebrowser"                , runOrRaiseNext "qutebrowser"              qutebrowserQuery)
-  , (prefix "S-f"       , "fbreader"                   , runOrRaiseNext "fbreader"                 (className =? "fbreader"))
-  , (prefix "M1-t"      , "tuxguitar"                  , runOrRaiseNext "tuxguitar"                (className =? "TuxGuitar"))
-  , (prefix "o"         , "libre-office"               , runOrRaiseNext "libreoffice"              libreOfficeQuery)
-  , (prefix "f"         , "browser"                    , runOrRaiseNext myBrowser                  myBrowserQuery)
-  , (prefix "C-S-e"     , "env"                        , spawnZenityCmd "env")
-  , (prefix "a"         , "date"                       , spawnZenityCmd "date")
-  , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd "ssh-add -l")
-  , (prefix "S-e"       , "cat-etc-environment"        , spawnZenityCmd "cat /etc/environment")
-  , (prefix "S-h"       , "cat-etc-hosts"              , spawnZenityCmd "cat /etc/hosts")
-  , (prefix "C-S-i"     , "sbin-ifconfig"              , spawnZenityCmd "/sbin/ifconfig")
-  , (prefix "S-b"       , "acpi"                       , spawnZenityCmd "acpi -b")
-  , (prefix "^"         , "top"                        , spawnZenityCmd "top -b -n 1 -c -d 1")
+  , (prefix "x"         , "terminal"                   , myRunOrRaise home myTerm                  myTerminalQuery)
+  , (prefix "C-x"       , "xterm"                      , myRunOrRaise home "xterm"                 (appName =? "xterm" <&&> className =? "XTerm"))
+  , (prefix "S-s"       , "sweethome-3d"               , myRunOrRaise home "sweethome3d"           (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
+  , (prefix "S-s"       , "signal"                     , myRunOrRaise home "signal-desktop"        (appName =? "signal" <&&> className =? "Signal"))
+  , (prefix "S-t"       , "vlc"                        , myRunOrRaise home "vlc"                   vlcQuery)
+  , (prefix "C-e"       , "pdf-reader"                 , myRunOrRaise home myPdfReader             (myPdfReaderQuery myPdfReader))
+  , (prefix "C-i"       , "image-viewer"               , myRunOrRaise home "feh"                   (className =? "Eog"))
+  , (prefix "d"         , "pinta"                      , myRunOrRaise home "pinta"                 (className =? "Pinta"))
+  , (prefix "C-a"       , "music-reader"               , myRunOrRaise home "audacious"             (className =? "Audacious"))
+  , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (className =? "gpartedbin"))   -- expect this installed as main system
+  , (prefix "C-S-x"     , "xosview"                    , myRunOrRaise home "xosview"               (className =? "xosview"))
+  , (prefix "C-S-g"     , "dia"                        , myRunOrRaise home "dia"                   (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
+  -- , (prefix "b"         , "conkeror"                   , myRunOrRaise "conkeror"                   conkerorQuery)
+  , (prefix "b"         , "qutebrowser"                , myRunOrRaise home "qutebrowser"           qutebrowserQuery)
+  , (prefix "S-f"       , "fbreader"                   , myRunOrRaise home "fbreader"              (className =? "fbreader"))
+  , (prefix "M1-t"      , "tuxguitar"                  , myRunOrRaise home "tuxguitar"             (className =? "TuxGuitar"))
+  , (prefix "o"         , "libre-office"               , myRunOrRaise home "libreoffice"           libreOfficeQuery)
+  , (prefix "f"         , "browser"                    , myRunOrRaise home myBrowser               myBrowserQuery)
+  , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
+  , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
+  , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")
+  , (prefix "S-e"       , "cat-etc-environment"        , spawnZenityCmd home "cat /etc/environment")
+  , (prefix "S-h"       , "cat-etc-hosts"              , spawnZenityCmd home "cat /etc/hosts")
+  , (prefix "C-S-i"     , "sbin-ifconfig"              , spawnZenityCmd home "ifconfig")
+  , (prefix "S-b"       , "acpi"                       , spawnZenityCmd home "acpi -b")
+  , (prefix "^"         , "top"                        , spawnZenityCmd home "top -b -n 1 -c -d 1")
   , (prefix "C-s"       , "print-screen"               , spawn "screenshot=\"$HOME/Pictures/screenshots/$(date +%F_%H-%M-%S).png\" ; scrot -u $screenshot; notify-send -t 1000 \"$(basename $screenshot) done!\"")
   , (prefix "M1-s"      , "mouse-print-screen"         , spawn "~/bin/touchpad/toggle-touchpad-manual.sh 1; screenshot=\"$HOME/Pictures/screenshots/$(date +%F_%H-%M-%S).png\" ; scrot -s $screenshot; notify-send -t 1000 \"$(basename $screenshot) done!\"")
   , (prefix "C-t"       , "toggle-touchpad"            , spawn "~/bin/touchpad/toggle-touchpad.sh")
   , (prefix "C-S-s"     , "suspend"                    , spawn "systemctl suspend")
   , (prefix "C-S-h"     , "hibernate"                  , spawn "systemctl hibernate")
-  , (prefix "S-a"       , "ssh-add"                    , spawn "~/bin/ssh/ssh-add.sh")
-  , (prefix "C-b"       , "brightness-decrease"        , spawn "xbacklight -dec 10")
-  , (prefix "C-f"       , "brightness-increase"        , spawn "xbacklight -inc 10")
-  , (prefix "C-S-m"     , "brightness-half"            , spawn "xbacklight -set 50")
-  , (prefix "S-m"       , "brightness-max"             , spawn "xbacklight -set 100")
-  , (prefix "M1-f"      , "sound-increase"             , spawn "exec amixer set Master 5%+")
-  , (prefix "M1-b"      , "sound-decrease"             , spawn "exec amixer set Master 5%-")
-  , (prefix "M1-m"      , "sound-toggle"               , spawn "exec amixer set Master toggle")
-  , (prefix "C-o"       , "wifi-off"                   , spawn "~/bin/wifi/wifi-off.sh")
-  , (prefix "S-o"       , "wifi-on"                    , spawn "~/bin/wifi/wifi-on.sh")
-  , (prefix "C-M1-l"    , "session-lock"               , spawn "~/bin/session/lock.sh")
+  , (prefix "C-b"       , "brightness-decrease"        , mySpawn home "xbacklight -dec 10")
+  , (prefix "C-f"       , "brightness-increase"        , mySpawn home "xbacklight -inc 10")
+  , (prefix "C-S-m"     , "brightness-half"            , mySpawn home "xbacklight -set 50")
+  , (prefix "S-m"       , "brightness-max"             , mySpawn home "xbacklight -set 100")
+  , (prefix "M1-f"      , "sound-increase"             , mySpawn home "amixer set Master 5%+")
+  , (prefix "M1-b"      , "sound-decrease"             , mySpawn home "amixer set Master 5%-")
+  , (prefix "M1-m"      , "sound-toggle"               , mySpawn home "amixer set Master toggle")
   , (prefix "M1-e"      , "pdf-reader-prompt"          , launchApp myXPConfig myPdfReader)
   , (prefix "s"         , "search-url"                 , search)
   , (prefix "r"         , "exec"                       , runOrRaisePrompt myXPConfig)
@@ -232,8 +236,8 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "t"         , "window-push-back-tiling"    , withFocused $ windows . W.sink)
   , (prefix "h"         , "window-inc-num-master-area" , sendMessage (IncMasterN 1))
   , (prefix "l"         , "window-dec-num-master-area" , sendMessage (IncMasterN (-1)))
-  , (prefix "C-S-q"     , "xmonad-recompile"           , spawn "stack exec xmonad -- --recompile && notify-send -t 1000 'XMonad recompiled!'")
-  , (prefix "S-q"       , "xmonad-restart"             , spawn "stack exec xmonad -- --restart && notify-send -t 1000 'XMonad Restarted!'")
+  , (prefix "C-S-q"     , "xmonad-recompile"           , spawn "~/bin/xmonad-action recompile")
+  , (prefix "S-q"       , "xmonad-restart"             , spawn "~/bin/xmonad-action restart")
   , (prefix "M1-q"      , "xmonad-quit"                , io exitSuccess)] ++
   -- M1-n   - Switch to workspace with id n
   -- S-n    - Move the client to workspace with id n

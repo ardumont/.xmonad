@@ -37,12 +37,12 @@ myTerminalQuery :: Query Bool
 myTerminalQuery = className =? "URxvt"
 
 myPdfReader :: String
---myPdfReader = "evince"
-myPdfReader = "apvlv"
+myPdfReader = "zathura"
 
 myPdfReaderQuery :: String -> Query Bool
 myPdfReaderQuery "evince" = className =? "Evince" <||> className =? ".evince-wrapped"
 myPdfReaderQuery "apvlv" = appName =? "apvlv" <&&> className =? "Apvlv"
+myPdfReaderQuery "zathura" = appName =? "zathura" <&&> className =? "Zathura"
 myPdfReaderQuery _ = error "Undefined"
 
 -- | My preferential browser

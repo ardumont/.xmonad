@@ -15,6 +15,7 @@ import           XMonad.Config.Desktop
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers (doFullFloat, isFullscreen)
+import           XMonad.Hooks.UrgencyHook
 import           XMonad.Layout.Monitor
 import           XMonad.Layout.NoBorders    (smartBorders)
 import           XMonad.Prompt
@@ -25,7 +26,8 @@ import           XMonad.Prompt.Window
 import           XMonad.Prompt.XMonad       (xmonadPromptC)
 import qualified XMonad.StackSet            as W
 import           XMonad.Util.EZConfig
-import           XMonad.Util.Run            (spawnPipe)
+import           XMonad.Util.NamedWindows
+import           XMonad.Util.Run            (spawnPipe, safeSpawn)
 
 -- | The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -460,12 +462,23 @@ screenKeyMonitor = monitor
      , opacity = 0.8
      }
 
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+-- | Urgency hook for notifications
+--
+instance UrgencyHook LibNotifyUrgencyHook where
+  urgencyHook LibNotifyUrgencyHook w = do
+    name     <- getName w
+    Just idx <- fmap (W.findTag w) $ gets windowset
+    safeSpawn "~/.nix-profile/bin/notify-send" [show name, "workspace " ++ idx]
+
 -- | Now run xmonad with all the defaults we set up.
 main :: IO ()
 main = do
   home <- getHomeDirectory
   xmproc <- spawnPipe "xmobar"
-  xmonad $ desktopConfig {
+  xmonad $ withUrgencyHook LibNotifyUrgencyHook
+         $ desktopConfig {
                   terminal           = myTerminal
                 , focusFollowsMouse  = myFocusFollowsMouse
                 , clickJustFocuses   = myClickJustFocuses
@@ -480,7 +493,8 @@ main = do
                 , manageHook         = myManageHook
                 , handleEventHook    = myEventHook
                 -- Status bars and logging
-                -- Perform an arbitrary action on each internal state change or X event.
+                -- Perform an arbitrary action on each internal state change
+                -- or X event.
                 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
                 --
                 , logHook            = dynamicLogWithPP $ xmobarPP

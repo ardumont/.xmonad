@@ -217,7 +217,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "g"         , "goto"                       , windowPromptGoto myXPConfig)
   , (prefix "M1-x"      , "meta-x"                     , xmonadPromptC keymapDescription myXPConfig)
   , (prefix "p"         , "pass-read"                  , passPrompt myXPConfig)
-  , (prefix "c"         , "close-current-window"       , kill >> spawn "notify-send -t 1000 'window closed!'")
+  , (prefix "c"         , "close-current-window"       , kill >> mySpawn "notify-send -t 1000 'window closed!'")
   , (prefix "<Space>"   , "rotate-layout"              , sendMessage NextLayout)
   , (prefix "C-<Space>" , "reset-layout"               , setLayout myLayoutHook)
   , (prefix "M1-r"      , "refresh"                    , refresh)

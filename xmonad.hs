@@ -124,18 +124,18 @@ spawnZenityCmd home =
 --
 nixProfilePath :: String -> String -> String
 nixProfilePath home cmd = combine home program
-  where nixProfilePath = ".nix-profile/bin/"::String
+  where nixProfilePath = ".nix-profile/bin"::String
         program = combine nixProfilePath cmd
 
--- | Run or raise with a default config folder from which finding the command
+-- | Run or raise command found in nix profile
 --
-myRunOrRaise :: String -> String -> Query Bool -> X ()
-myRunOrRaise home cmd = runOrRaiseNext $ nixProfilePath home cmd
+nixRunOrRaise :: String -> String -> Query Bool -> X ()
+nixRunOrRaise home cmd = runOrRaiseNext $ nixProfilePath home cmd
 
 -- | Run or raise home script found in ~/bin/
 --
-homeScript :: String -> String -> Query Bool -> X ()
-homeScript home cmd = runOrRaiseNext $ combine home program
+homeRunOrRaise :: String -> String -> Query Bool -> X ()
+homeRunOrRaise home cmd = runOrRaiseNext $ combine home program
   where program = combine ("bin"::String) cmd
 
 -- | Spawn command adding the extra nix profile path needed
@@ -177,28 +177,28 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   [ (prefix "C-g"       , "abort"                      , mySpawn home "xdotool key Escape")
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
-  , (prefix "e"         , "emacs"                      , homeScript home "emacs.sh"                        myEmacsQuery)
-  , (prefix "S-c"       , "lighttable"                 , myRunOrRaise home "light"                         (appName =? "lighttable" <&&> className =? "LightTable"))
-  , (prefix "C-r"       , "simplescreenrecorder"       , myRunOrRaise home "simplescreenrecorder"          (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
-  , (prefix "M1-S-x"    , "mcomix"                     , myRunOrRaise home "mcomix"                        (appName =? "mcomix" <&&> className =? "MComix"))
+  , (prefix "e"         , "emacs"                      , homeRunOrRaise home "emacs.sh"                myEmacsQuery)
+  , (prefix "S-c"       , "lighttable"                 , nixRunOrRaise home "light"                 (appName =? "lighttable" <&&> className =? "LightTable"))
+  , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder"  (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
+  , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"                (appName =? "mcomix" <&&> className =? "MComix"))
   , (prefix prefixKey   , "promote"                    , promote)  -- window manipulation
-  , (prefix "x"         , "terminal"                   , myRunOrRaise home myTerm                  myTerminalQuery)
-  , (prefix "C-x"       , "xterm"                      , myRunOrRaise home "xterm"                 (appName =? "xterm" <&&> className =? "XTerm"))
-  , (prefix "S-s"       , "sweethome-3d"               , myRunOrRaise home "sweethome3d"           (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
-  , (prefix "S-s"       , "signal"                     , myRunOrRaise home "signal-desktop"        (appName =? "signal" <&&> className =? "Signal"))
-  , (prefix "S-t"       , "vlc"                        , myRunOrRaise home "vlc"                   vlcQuery)
-  , (prefix "C-e"       , "pdf-reader"                 , myRunOrRaise home myPdfReader             (myPdfReaderQuery myPdfReader))
-  , (prefix "C-i"       , "image-viewer"               , myRunOrRaise home "feh"                   (appName =? "feh" <&&> className =? "feh"))
-  , (prefix "d"         , "pinta"                      , myRunOrRaise home "pinta"                 (appName =? "Pinta" <&&> className =? "Pinta"))
-  , (prefix "C-a"       , "music-reader"               , myRunOrRaise home "audacious"             (appName =? "audacious" <&&> className =? "Audacious"))
+  , (prefix "x"         , "terminal"                   , nixRunOrRaise home myTerm                  myTerminalQuery)
+  , (prefix "C-x"       , "xterm"                      , nixRunOrRaise home "xterm"                 (appName =? "xterm" <&&> className =? "XTerm"))
+  , (prefix "S-s"       , "sweethome-3d"               , nixRunOrRaise home "sweethome3d"           (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
+  , (prefix "S-s"       , "signal"                     , nixRunOrRaise home "signal-desktop"        (appName =? "signal" <&&> className =? "Signal"))
+  , (prefix "S-t"       , "vlc"                        , nixRunOrRaise home "vlc"                   vlcQuery)
+  , (prefix "C-e"       , "pdf-reader"                 , nixRunOrRaise home myPdfReader             (myPdfReaderQuery myPdfReader))
+  , (prefix "C-i"       , "image-viewer"               , nixRunOrRaise home "feh"                   (appName =? "feh" <&&> className =? "feh"))
+  , (prefix "d"         , "pinta"                      , nixRunOrRaise home "pinta"                 (appName =? "Pinta" <&&> className =? "Pinta"))
+  , (prefix "C-a"       , "music-reader"               , nixRunOrRaise home "audacious"             (appName =? "audacious" <&&> className =? "Audacious"))
   , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (appName =? "gpartedbin" <&&> className =? "GParted"))   -- expect this installed as main system
-  , (prefix "C-S-x"     , "xosview"                    , myRunOrRaise home "xosview2"              (appName =? "xosview" <&&> className =? "XOsview2"))
-  , (prefix "C-S-g"     , "dia"                        , myRunOrRaise home "dia"                   (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
-  -- , (prefix "b"         , "conkeror"                   , myRunOrRaise "conkeror"                   conkerorQuery)
-  , (prefix "b"         , "qutebrowser"                , runOrRaiseNext "qutebrowser"              qutebrowserQuery)
-  , (prefix "M1-t"      , "tuxguitar"                  , myRunOrRaise home "tuxguitar"             (appName =? "TuxGuitar" <&&> className =? "TuxGuitar"))
-  , (prefix "o"         , "libre-office"               , myRunOrRaise home "libreoffice"           libreOfficeQuery)
-  , (prefix "f"         , "browser"                    , myRunOrRaise home myBrowser               myBrowserQuery)
+  , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"              (appName =? "xosview" <&&> className =? "XOsview2"))
+  , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                   (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
+  -- , (prefix "b"         , "conkeror"                   , nixRunOrRaise "conkeror"                   conkerorQuery)
+  , (prefix "b"         , "qutebrowser"                , runOrRaiseNext "qutebrowser"              qutebrowserQuery)  -- qutebrowser is not working yet
+  , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"             (appName =? "TuxGuitar" <&&> className =? "TuxGuitar"))
+  , (prefix "o"         , "libre-office"               , nixRunOrRaise home "libreoffice"           libreOfficeQuery)
+  , (prefix "f"         , "browser"                    , nixRunOrRaise home myBrowser               myBrowserQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
   , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")

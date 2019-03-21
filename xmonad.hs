@@ -171,8 +171,7 @@ xephyrQuery = appName =? ".Xephyr-wrapped" <&&> className =? "Xephyr"
 -- | My keymap as (prefix keybindings, command description, command)
 --
 myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
-myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
-                                           , layoutHook = myLayoutHook
+myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
                                            , workspaces = myWss}) =
   [ (prefix "C-g"       , "abort"                      , mySpawn home "xdotool key Escape")
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
@@ -182,7 +181,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder"  (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
   , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"                (appName =? "mcomix" <&&> className =? "MComix"))
   , (prefix prefixKey   , "promote"                    , promote)  -- window manipulation
-  , (prefix "x"         , "terminal"                   , nixRunOrRaise home myTerm                  myTerminalQuery)
+  , (prefix "x"         , "terminal"                   , nixRunOrRaise home myTerminal              myTerminalQuery)
   , (prefix "C-x"       , "xterm"                      , nixRunOrRaise home "xterm"                 (appName =? "xterm" <&&> className =? "XTerm"))
   , (prefix "S-s"       , "sweethome-3d"               , nixRunOrRaise home "sweethome3d"           (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
   , (prefix "S-s"       , "signal"                     , nixRunOrRaise home "signal-desktop"        (appName =? "signal" <&&> className =? "Signal"))
@@ -485,8 +484,7 @@ main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ withUrgencyHook LibNotifyUrgencyHook
          $ desktopConfig {
-                  terminal           = myTerminal
-                , focusFollowsMouse  = myFocusFollowsMouse
+                  focusFollowsMouse  = myFocusFollowsMouse
                 , clickJustFocuses   = myClickJustFocuses
                 , borderWidth        = myBorderWidth
                 , modMask            = myModMask

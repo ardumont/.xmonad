@@ -132,6 +132,12 @@ nixProfilePath home cmd = combine home program
 myRunOrRaise :: String -> String -> Query Bool -> X ()
 myRunOrRaise home cmd = runOrRaiseNext $ nixProfilePath home cmd
 
+-- | Run or raise home script found in ~/bin/
+--
+homeScript :: String -> String -> Query Bool -> X ()
+homeScript home cmd = runOrRaiseNext $ combine home program
+  where program = combine ("bin"::String) cmd
+
 -- | Spawn command adding the extra nix profile path needed
 --
 mySpawn :: String -> String -> X ()
@@ -171,7 +177,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   [ (prefix "C-g"       , "abort"                      , mySpawn home "xdotool key Escape")
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
-  , (prefix "e"         , "emacs"                      , runOrRaiseNext "~/bin/emacs.sh"                   myEmacsQuery)
+  , (prefix "e"         , "emacs"                      , homeScript home "emacs.sh"                        myEmacsQuery)
   , (prefix "S-c"       , "lighttable"                 , myRunOrRaise home "light"                         (appName =? "lighttable" <&&> className =? "LightTable"))
   , (prefix "C-r"       , "simplescreenrecorder"       , myRunOrRaise home "simplescreenrecorder"          (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
   , (prefix "M1-S-x"    , "mcomix"                     , myRunOrRaise home "mcomix"                        (appName =? "mcomix" <&&> className =? "MComix"))

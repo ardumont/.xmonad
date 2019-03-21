@@ -181,7 +181,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder"  (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
   , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"                (appName =? "mcomix" <&&> className =? "MComix"))
   , (prefix prefixKey   , "promote"                    , promote)  -- window manipulation
-  , (prefix "x"         , "terminal"                   , nixRunOrRaise home myTerminal              myTerminalQuery)
+  , (prefix "x"         , "terminal"                   , homeRunOrRaise home myTerminal              myTerminalQuery)
   , (prefix "C-x"       , "xterm"                      , nixRunOrRaise home "xterm"                 (appName =? "xterm" <&&> className =? "XTerm"))
   , (prefix "S-s"       , "sweethome-3d"               , nixRunOrRaise home "sweethome3d"           (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
   , (prefix "S-s"       , "signal"                     , nixRunOrRaise home "signal-desktop"        (appName =? "signal" <&&> className =? "Signal"))

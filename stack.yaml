@@ -1,5 +1,5 @@
 extra-deps:
-  - xmonad-0.13
-  - xmonad-contrib-0.13
+  - xmonad-0.15
+  - xmonad-contrib-0.15
   - X11-xft-0.3.1
-resolver: lts-9.21  # ghc 8.0.2
+resolver: lts-13.13

@@ -177,7 +177,7 @@ myKeymapWithDescription home conf@(XConfig { terminal   = myTerm
   [ (prefix "C-g"       , "abort"                      , mySpawn home "xdotool key Escape")
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
-  , (prefix "e"         , "emacs"                      , homeRunOrRaise home "emacs.sh"                myEmacsQuery)
+  , (prefix "e"         , "emacs"                      , homeRunOrRaise home "emacs"                myEmacsQuery)
   , (prefix "S-c"       , "lighttable"                 , nixRunOrRaise home "light"                 (appName =? "lighttable" <&&> className =? "LightTable"))
   , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder"  (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
   , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"                (appName =? "mcomix" <&&> className =? "MComix"))

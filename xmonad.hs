@@ -193,10 +193,10 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (appName =? "gpartedbin" <&&> className =? "GParted"))   -- expect this installed as main system
   , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"             (appName =? "xosview" <&&> className =? "XOsview2"))
   , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                  (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
-  , (prefix "b"         , "qutebrowser"                , runOrRaiseNext "qutebrowser"              qutebrowserQuery)  -- qutebrowser is not working yet
+  , (prefix "f"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)
+  , (prefix "b"         , "qutebrowser"                , homeRunOrRaise home myBrowser             myBrowserQuery)  -- qutebrowser working on nixos, not on plain nix
   , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"            (appName =? "TuxGuitar" <&&> className =? "TuxGuitar"))
   , (prefix "o"         , "libre-office"               , nixRunOrRaise home "libreoffice"          libreOfficeQuery)
-  , (prefix "f"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
   , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")

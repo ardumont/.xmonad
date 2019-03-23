@@ -197,7 +197,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "b"         , "qutebrowser"                , runOrRaiseNext "qutebrowser"              qutebrowserQuery)  -- qutebrowser is not working yet
   , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"             (appName =? "TuxGuitar" <&&> className =? "TuxGuitar"))
   , (prefix "o"         , "libre-office"               , nixRunOrRaise home "libreoffice"           libreOfficeQuery)
-  , (prefix "f"         , "browser"                    , nixRunOrRaise home myBrowser               myBrowserQuery)
+  , (prefix "f"         , "browser"                    , homeRunOrRaise home myBrowser              myBrowserQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
   , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")

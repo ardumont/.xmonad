@@ -29,6 +29,9 @@ import           XMonad.Util.EZConfig
 import           XMonad.Util.NamedWindows
 import           XMonad.Util.Run            (spawnPipe, safeSpawn)
 
+dotXmonadVersion :: String
+dotXmonadVersion = "v0.0.1"
+
 -- | The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -174,6 +177,7 @@ myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
 myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
                                            , workspaces = myWss}) =
   [ (prefix "C-g"       , "abort"                      , mySpawn home "xdotool key Escape")
+  , (prefix "v"         , "version"                    , spawnZenityCmd home $ "echo version:" ++ dotXmonadVersion)
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
   , (prefix "e"         , "emacs"                      , homeRunOrRaise home "emacs"               myEmacsQuery)

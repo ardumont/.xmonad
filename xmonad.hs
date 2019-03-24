@@ -233,6 +233,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-r"      , "refresh"                    , refresh)
   , (prefix "M1-n"      , "window-goto"                , windowPromptGoto def)
   , (prefix "C-M1-b"    , "banish-mouse"               , spawn "~/bin/banish-mouse")
+  , (prefix "C-M1-l"    , "lock-screen"                , mySpawn home "xscreensaver-command -lock")
   , (prefix "<Tab>"     , "window-move-focus-next"     , windows W.focusDown)
   , (prefix "j"         , "window-move-focus-next"     , windows W.focusDown)
   , (prefix "k"         , "window-move-focus-previous" , windows W.focusUp)

@@ -476,17 +476,18 @@ data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
 -- | Urgency hook for notifications
 --
 instance UrgencyHook LibNotifyUrgencyHook where
-  urgencyHook LibNotifyUrgencyHook home w = do
+  urgencyHook LibNotifyUrgencyHook w = do
     name     <- getName w
     Just idx <- fmap (W.findTag w) $ gets windowset
-    safeSpawn (nixProfilePath home "/notify-send") [show name, "workspace " ++ idx]
+    safeSpawn "~/.nix-profile/bin/notify-send"
+              [show name, "workspace " ++ idx]
 
 -- | Now run xmonad with all the defaults we set up.
 main :: IO ()
 main = do
   home <- getHomeDirectory
   xmproc <- spawnPipe $ nixProfilePath home "xmobar"
-  xmonad $ withUrgencyHook LibNotifyUrgencyHook home
+  xmonad $ withUrgencyHook LibNotifyUrgencyHook
          $ desktopConfig {
                   focusFollowsMouse  = myFocusFollowsMouse
                 , clickJustFocuses   = myClickJustFocuses

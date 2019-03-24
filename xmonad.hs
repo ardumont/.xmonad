@@ -437,7 +437,7 @@ myStartupHook = return ()
 -- | Font
 --
 myDefaultFont :: String
-myDefaultFont = "-unknown-DejaVu Sans Mono-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1"
+myDefaultFont = "xft:DejaVu Sans Mono for Powerline:size=10"
 
 -- | Border colors for unfocused and focused windows, respectively.
 --

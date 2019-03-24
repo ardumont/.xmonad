@@ -486,7 +486,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
 main :: IO ()
 main = do
   home <- getHomeDirectory
-  xmproc <- spawnPipe $ nixProfilePath home "xmobar"
+  xmproc <- spawnPipe $ combine home "bin/xmobar"
   xmonad $ withUrgencyHook LibNotifyUrgencyHook
          $ desktopConfig {
                   focusFollowsMouse  = myFocusFollowsMouse

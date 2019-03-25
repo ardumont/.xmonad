@@ -386,7 +386,7 @@ myWorkspaces = sort [ workspaceEmacs
 myManageHook :: Query (Endo WindowSet)
 myManageHook = composeAll
     [ isFullscreen                                --> doFullFloat
-    , vlcQuery                                    --> doShift workspaceFloat >> doFloat
+    , vlcQuery                                    --> doFullFloat
     , xephyrQuery                                 --> doShift workspaceFloat >> doFloat
     , zenityQuery                                 --> doFloat
     , myEmacsQuery                                --> doShift workspaceEmacs

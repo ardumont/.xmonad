@@ -59,12 +59,6 @@ myPdfReaderQuery _ = error "Undefined"
 myBrowser :: String
 myBrowser = "qutebrowser"
 
-firefoxQuery :: Query Bool
-firefoxQuery = appName =? "Navigator" <&&> (className =? "Firefox" <||>
-                                            className =? "Tor Browser" <||>
-                                            className =? "Iceweasel" <||>
-                                            className =? "Firefox-esr")
-
 myBrowserQuery :: Query Bool
 myBrowserQuery = qutebrowserQuery
 

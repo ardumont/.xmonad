@@ -165,11 +165,11 @@ qutebrowserQuery = (appName =? "qutebrowser" <||> appName =? ".qutebrowser-wrapp
 vlcQuery :: Query Bool
 vlcQuery = appName =? "vlc" <&&> (className =? "vlc" <||> className =? "Vlc")
 
-skypeQuery :: Query Bool
-skypeQuery = appName =? "skype" <&&> className =? "Skype"
-
 xephyrQuery :: Query Bool
 xephyrQuery = appName =? ".Xephyr-wrapped" <&&> className =? "Xephyr"
+
+zenityQuery :: Query Bool
+zenityQuery = appName =? "zenity" <&&> className =? "Zenity"
 
 -- | My keymap as (prefix keybindings, command description, command)
 --
@@ -388,26 +388,16 @@ myWorkspaces = sort [ workspaceEmacs
 myManageHook :: Query (Endo WindowSet)
 myManageHook = composeAll
     [ isFullscreen                                --> doFullFloat
-    -- , vlcQuery                                    --> doShift workspaceFloat >> doFloat
-    , className =? "Gimp"                         --> doShift workspaceFloat >> doFloat
+    , vlcQuery                                    --> doShift workspaceFloat >> doFloat
     , xephyrQuery                                 --> doShift workspaceFloat >> doFloat
-    , className =? "Zenity"                       --> doFloat
-    , appName   =? "desktop_window"               --> doIgnore
-    , appName   =? "kdesktop"                     --> doIgnore
+    , zenityQuery                                 --> doFloat
     , myEmacsQuery                                --> doShift workspaceEmacs
     , myTerminalQuery                             --> doShift workspaceTerminal
     , myBrowserQuery                              --> doShift workspaceWeb
     , conkerorQuery                               --> doShift workspaceWeb
     , myPdfReaderQuery myPdfReader                --> doShift workspaceBooks
-    , appName =? "sun-awt-X11-XFramePeer" <&&>
-        className =? "jetbrains-idea-ce"          --> doShift workspaceIde
-    , appName =? "sun-awt-X11-XFramePeer"         --> doShift workspaceDb
-    , skypeQuery                                  --> doShift workspaceIrc
-    , className =? "Pidgin"                       --> doShift workspaceIrc
     , vmQuery                                     --> doShift workspaceVM
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
-    , appName =? "..key-mon-wrapped-wrapped" <&&>
-        className =? "..key-mon-wrapped-wrapped"  --> doIgnore
     , manageMonitor screenKeyMonitor
     ]
   ------------------------------------------------------------------------

@@ -94,7 +94,7 @@ myClickJustFocuses = True
 -- | Width of the window border in pixels.
 --
 myBorderWidth :: Dimension
-myBorderWidth  = 2
+myBorderWidth  = 1
 
 -- | modMask lets you specify which modkey you want to use. mod4mask
 -- is window key. I'm used to prefix key because of emacs, stumpwm,

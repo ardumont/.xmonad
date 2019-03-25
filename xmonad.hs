@@ -13,9 +13,9 @@ import qualified XMonad.Actions.Submap      as SM
 import           XMonad.Actions.WindowGo    (runOrRaiseNext)
 import           XMonad.Config.Desktop
 import           XMonad.Hooks.DynamicLog
-import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.ManageDocks  -- avoid windows covering menu
 import           XMonad.Hooks.ManageHelpers (doFullFloat, isFullscreen)
-import           XMonad.Hooks.UrgencyHook
+import           XMonad.Hooks.UrgencyHook  -- notification
 import           XMonad.Layout.Monitor
 import           XMonad.Layout.NoBorders    (smartBorders)
 import           XMonad.Prompt
@@ -493,9 +493,8 @@ main = do
                 , focusedBorderColor = myFocusedBorderColor
                 , keys               = myKeys home
                 , mouseBindings      = myMouseBindings
-                , layoutHook         = smartBorders . avoidStruts $ myLayout
+                , layoutHook         = smartBorders .avoidStruts $ myLayout
                 , manageHook         = manageDocks <+> myManageHook
-                , handleEventHook    = myEventHook
                 -- Status bars and logging
                 -- Perform an arbitrary action on each internal state change
                 -- or X event.
@@ -508,4 +507,5 @@ main = do
                                                         , ppSep = "   "
                                                         }
                 , startupHook        = myStartupHook
+                , handleEventHook    = docksEventHook
             }

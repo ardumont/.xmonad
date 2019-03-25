@@ -387,8 +387,7 @@ myWorkspaces = sort [ workspaceEmacs
 --
 myManageHook :: Query (Endo WindowSet)
 myManageHook = composeAll
-    [ manageDocks
-    , isFullscreen                                --> doFullFloat
+    [ isFullscreen                                --> doFullFloat
     -- , vlcQuery                                    --> doShift workspaceFloat >> doFloat
     , className =? "Gimp"                         --> doShift workspaceFloat >> doFloat
     , xephyrQuery                                 --> doShift workspaceFloat >> doFloat
@@ -499,7 +498,7 @@ main = do
                 , keys               = myKeys home
                 , mouseBindings      = myMouseBindings
                 , layoutHook         = smartBorders . avoidStruts $ myLayout
-                , manageHook         = myManageHook
+                , manageHook         = manageDocks <+> myManageHook
                 , handleEventHook    = myEventHook
                 -- Status bars and logging
                 -- Perform an arbitrary action on each internal state change

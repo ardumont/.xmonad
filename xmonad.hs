@@ -38,16 +38,20 @@ dotXmonadVersion = "v0.0.1"
 myTerminal :: String
 myTerminal = "urxvt"
 
+-- | Simple query utility to reduce duplication
+--
+query :: String -> String -> Query Bool
+query appname classname = appName =? appname <&&> className =? classname
+
 myTerminalQuery :: Query Bool
-myTerminalQuery = className =? "URxvt"
+myTerminalQuery = query "urxvt" "URxvt"
 
 myPdfReader :: String
 myPdfReader = "zathura"
 
 myPdfReaderQuery :: String -> Query Bool
-myPdfReaderQuery "evince" = className =? "Evince" <||> className =? ".evince-wrapped"
-myPdfReaderQuery "apvlv" = appName =? "apvlv" <&&> className =? "Apvlv"
-myPdfReaderQuery "zathura" = appName =? "zathura" <&&> className =? "Zathura"
+myPdfReaderQuery "apvlv" = query "apvlv" "Apvlv"
+myPdfReaderQuery "zathura" = query "zathura" "Zathura"
 myPdfReaderQuery _ = error "Undefined"
 
 -- | My preferential browser
@@ -67,15 +71,15 @@ myBrowserQuery = qutebrowserQuery
 -- | VM query
 --
 vmQuery :: Query Bool
-vmQuery = (appName =? "qemu-system-x86_64" <&&> className =? "qemu-system-x86_64") <||>
-          (appName =? "Qt-subapplication" <&&> className =? "VirtualBox") <||>
+vmQuery = (query "qemu-system-x86_64" "qemu-system-x86_64") <||>
+          (query "Qt-subapplication" "VirtualBox") <||>
           className =? ".emulator64-arm-wrapped"  <||>
           className =? "Android SDK Manager"
 
 -- | My preferential emacs
 --
 myEmacsQuery :: Query Bool
-myEmacsQuery = (appName =? "emacs" <||> appName =? "_emacs-wrapped") <&&> className =? "Emacs"
+myEmacsQuery = query"_emacs-wrapped" "Emacs"
 
 -- | Whether focus follows the mouse pointer.
 --
@@ -157,19 +161,19 @@ libreOfficeQuery = (appName =? "libreofficedev" <||> appName =? "libreoffice") <
                     className =? "libreoffice-startcenter")
 
 conkerorQuery :: Query Bool
-conkerorQuery = appName =? "Navigator" <&&> className =? "Conkeror"
+conkerorQuery = query "Navigator" "Conkeror"
 
 qutebrowserQuery :: Query Bool
-qutebrowserQuery = (appName =? "qutebrowser" <||> appName =? ".qutebrowser-wrapped") <&&> className =? "qutebrowser"
+qutebrowserQuery = query ".qutebrowser-wrapped" "qutebrowser"
 
 vlcQuery :: Query Bool
-vlcQuery = appName =? "vlc" <&&> (className =? "vlc" <||> className =? "Vlc")
+vlcQuery = query "vlc" "vlc"
 
 xephyrQuery :: Query Bool
-xephyrQuery = appName =? ".Xephyr-wrapped" <&&> className =? "Xephyr"
+xephyrQuery = query ".Xephyr-wrapped" "Xephyr"
 
 zenityQuery :: Query Bool
-zenityQuery = appName =? "zenity" <&&> className =? "Zenity"
+zenityQuery = query "zenity" "Zenity"
 
 -- | My keymap as (prefix keybindings, command description, command)
 --
@@ -181,25 +185,25 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
   , (prefix "e"         , "emacs"                      , homeRunOrRaise home "emacs"               myEmacsQuery)
-  , (prefix "S-c"       , "lighttable"                 , nixRunOrRaise home "light"                (appName =? "lighttable" <&&> className =? "LightTable"))
-  , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder" (appName =? "simplescreenrecorder" <&&> className =? "SimpleScreenRecorder"))
-  , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"               (appName =? "mcomix" <&&> className =? "MComix"))
+  , (prefix "S-c"       , "lighttable"                 , nixRunOrRaise home "light"                (query "lighttable" "LightTable"))
+  , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder" (query "simplescreenrecorder" "SimpleScreenRecorder"))
+  , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"               (query "mcomix" "MComix"))
   , (prefix prefixKey   , "promote"                    , promote)  -- window manipulation
   , (prefix "x"         , "terminal"                   , homeRunOrRaise home myTerminal            myTerminalQuery)
-  , (prefix "C-x"       , "xterm"                      , nixRunOrRaise home "xterm"                (appName =? "xterm" <&&> className =? "XTerm"))
-  , (prefix "S-s"       , "sweethome-3d"               , nixRunOrRaise home "sweethome3d"          (appName =? "sun-awt-X11-XFramePeer" <&&> className =? "com-eteks-sweethome3d-SweetHome3D"))
-  , (prefix "S-s"       , "signal"                     , nixRunOrRaise home "signal-desktop"       (appName =? "signal" <&&> className =? "Signal"))
+  , (prefix "C-x"       , "xterm"                      , nixRunOrRaise home "xterm"                (query "xterm" "XTerm"))
+  , (prefix "S-s"       , "sweethome-3d"               , nixRunOrRaise home "sweethome3d"          (query "sun-awt-X11-XFramePeer" "com-eteks-sweethome3d-SweetHome3D"))
+  , (prefix "S-s"       , "signal"                     , nixRunOrRaise home "signal-desktop"       (query "signal" "Signal"))
   , (prefix "S-t"       , "vlc"                        , nixRunOrRaise home "vlc"                  vlcQuery)
   , (prefix "C-e"       , "pdf-reader"                 , nixRunOrRaise home myPdfReader            (myPdfReaderQuery myPdfReader))
-  , (prefix "C-i"       , "image-viewer"               , nixRunOrRaise home "feh"                  (appName =? "feh" <&&> className =? "feh"))
-  , (prefix "d"         , "pinta"                      , nixRunOrRaise home "pinta"                (appName =? "Pinta" <&&> className =? "Pinta"))
-  , (prefix "C-a"       , "music-reader"               , nixRunOrRaise home "audacious"            (appName =? "audacious" <&&> className =? "Audacious"))
-  , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (appName =? "gpartedbin" <&&> className =? "GParted"))   -- expect this installed as main system
-  , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"             (appName =? "xosview" <&&> className =? "XOsview2"))
-  , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                  (appName =? "dia-normal" <&&> className =? "Dia-Normal"))
+  , (prefix "C-i"       , "image-viewer"               , nixRunOrRaise home "feh"                  (query "feh" "feh"))
+  , (prefix "d"         , "pinta"                      , nixRunOrRaise home "pinta"                (query "Pinta" "Pinta"))
+  , (prefix "C-a"       , "music-reader"               , nixRunOrRaise home "audacious"            (query "audacious" "Audacious"))
+  , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (query "gpartedbin" "GParted"))   -- expect this installed as main system
+  , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"             (query "xosview" "XOsview2"))
+  , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                  (query "dia-normal" "Dia-Normal"))
   , (prefix "f"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)
   , (prefix "b"         , "qutebrowser"                , homeRunOrRaise home myBrowser             myBrowserQuery)  -- qutebrowser working on nixos, not on plain nix
-  , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"            (appName =? "TuxGuitar" <&&> className =? "TuxGuitar"))
+  , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"            (query "TuxGuitar" "TuxGuitar"))
   , (prefix "o"         , "libre-office"               , nixRunOrRaise home "libreoffice"          libreOfficeQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")

@@ -481,6 +481,12 @@ instance UrgencyHook LibNotifyUrgencyHook where
     safeSpawn "~/.nix-profile/bin/notify-send"
               [show name, "workspace " ++ idx]
 
+-- Color of current window title in xmobar.
+xmobarTitleColor = "#FFB6B0"
+
+-- Color of current workspace in xmobar.
+xmobarCurrentWorkspaceColor = "#CEFFAC"
+
 -- | Now run xmonad with all the defaults we set up.
 main :: IO ()
 main = do
@@ -507,6 +513,9 @@ main = do
                 --
                 , logHook            = dynamicLogWithPP $ xmobarPP
                                                         { ppOutput = hPutStrLn xmproc
-                                                        , ppTitle = xmobarColor "green" "" . shorten 50}
+                                                        , ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
+                                                        , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
+                                                        , ppSep = "   "
+                                                        }
                 , startupHook        = myStartupHook
             }

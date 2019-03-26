@@ -159,7 +159,7 @@ conkerorQuery :: Query Bool
 conkerorQuery = query "Navigator" "Conkeror"
 
 qutebrowserQuery :: Query Bool
-qutebrowserQuery = query ".qutebrowser-wrapped" "qutebrowser"
+qutebrowserQuery = className =? "qutebrowser"
 
 vlcQuery :: Query Bool
 vlcQuery = query "vlc" "vlc"

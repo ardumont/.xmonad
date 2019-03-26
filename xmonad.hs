@@ -73,7 +73,8 @@ vmQuery = (query "qemu-system-x86_64" "qemu-system-x86_64") <||>
 -- | My preferential emacs
 --
 myEmacsQuery :: Query Bool
-myEmacsQuery = query"_emacs-wrapped" "Emacs"
+myEmacsQuery = query "_emacs-wrapped" "Emacs" <||>
+               query "emacs" "Emacs"
 
 -- | Whether focus follows the mouse pointer.
 --

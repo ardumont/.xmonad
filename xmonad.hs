@@ -221,7 +221,6 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-b"      , "sound-decrease"             , spawn "amixer set Master 5%-")
   , (prefix "M1-m"      , "sound-toggle"               , spawn "amixer set Master toggle")
   , (prefix "M1-e"      , "pdf-reader-prompt"          , launchApp myXPConfig myPdfReader)
-  , (prefix "s"         , "search-url"                 , search)
   , (prefix "r"         , "exec"                       , runOrRaisePrompt myXPConfig)
   , (prefix "g"         , "goto"                       , windowPromptGoto myXPConfig)
   , (prefix "M1-x"      , "meta-x"                     , xmonadPromptC keymapDescription myXPConfig)
@@ -260,24 +259,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
     | screenNumber <- [1,0],
       (fnAction, pk, metaXAction) <- [ (W.view,  "S-M1-", "switch-to-physical-screen-")
                                     , (W.shift, "C-M1-", "move-client-to-screen-")]]
-  where -- Permits the search through the system browser
-        searchSite = S.promptSearchBrowser myXPConfig myBrowser
-        search     = SM.submap . mkKeymap conf $
-                     [ ("S-g", searchSite S.google)
-                     , ("h"  , searchSite S.hoogle)
-                     , ("S-h", searchSite S.hackage)
-                     , ("a"  , searchSite S.amazon)
-                     , ("i"  , searchSite S.imdb)
-                     , ("S-i", searchSite S.images)
-                     , ("d"  , searchSite S.deb)
-                     , ("y"  , searchSite S.youtube)
-                     , ("w"  , searchSite S.wikipedia)
-                     , ("d"  , searchSite S.duckduckgo)
-                     , ("s"  , searchSite S.stackage)
-                     , ("S-w", searchSite S.wayback)
-                     , ("g"  , searchSite $ S.searchEngine "github" "search?utf8=✓&q=")]
-        -- Rework the keymap description to extract the command description and the associated actions
-        keymapDescription = map (\ (keybinding, xmonadActionDesc, xmonadAction) -> (xmonadActionDesc ++ " - " ++ keybinding, xmonadAction)) fullKeymap
+  where keymapDescription = map (\ (keybinding, xmonadActionDesc, xmonadAction) -> (xmonadActionDesc ++ " - " ++ keybinding, xmonadAction)) fullKeymap
         fullKeymap = myKeymapWithDescription home conf
 
 -- | key bindings

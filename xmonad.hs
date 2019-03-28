@@ -424,6 +424,7 @@ myXPConfig = def
               , height            = 20
               , position          = Top
               , historySize       = 256
+              , alwaysHighlight   = True
               , promptBorderWidth = 1}
 
 -- | Make the screenkey window appear in front of other windows

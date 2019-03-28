@@ -445,7 +445,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
   urgencyHook LibNotifyUrgencyHook w = do
     name     <- getName w
     Just idx <- fmap (W.findTag w) $ gets windowset
-    safeSpawn "~/.nix-profile/bin/notify-send"
+    safeSpawn "$HOME/.nix-profile/bin/notify-send"
               [show name, "workspace " ++ idx]
 
 -- Color of current window title in xmobar.

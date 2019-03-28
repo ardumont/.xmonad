@@ -222,7 +222,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-m"      , "sound-toggle"               , spawn "amixer set Master toggle")
   , (prefix "M1-e"      , "pdf-reader-prompt"          , launchApp myXPConfig myPdfReader)
   , (prefix "r"         , "exec"                       , runOrRaisePrompt myXPConfig)
-  , (prefix "g"         , "goto"                       , windowPromptGoto myXPConfig)
+  , (prefix "g"         , "goto"                       , windowPrompt myXPConfig Goto allWindows)
   , (prefix "M1-x"      , "meta-x"                     , xmonadPromptC keymapDescription myXPConfig)
   , (prefix "p"         , "pass-read"                  , passPrompt myXPConfig)
   , (prefix "k"         , "kill-current-window"        , kill >> mySpawn home "notify-send -t 1000 'window closed!'")

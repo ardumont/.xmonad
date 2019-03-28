@@ -229,7 +229,6 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "<Space>"   , "rotate-layout"              , sendMessage NextLayout)
   , (prefix "C-<Space>" , "reset-layout"               , setLayout myLayoutHook)
   , (prefix "M1-r"      , "refresh"                    , refresh)
-  , (prefix "M1-n"      , "window-goto"                , windowPromptGoto def)
   , (prefix "C-M1-b"    , "banish-mouse"               , spawn "~/bin/banish-mouse")
   , (prefix "C-M1-l"    , "lock-screen"                , mySpawn home "xscreensaver-command -lock")
   , (prefix "o"         , "window-move-focus-next"     , windows W.focusDown)

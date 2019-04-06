@@ -415,7 +415,7 @@ myFocusedBorderColor = "#5193f7"
 --
 myXPConfig :: XPConfig
 myXPConfig = def
-              { font              = myDefaultFont
+              { font              = "xft:DejaVu Sans Mono"
               , bgColor           = "#1e2320"
               , fgColor           = "#dddddd"
               , bgHLight          = "#5f5f5f"
@@ -425,7 +425,7 @@ myXPConfig = def
               , position          = Top
               , historySize       = 256
               , alwaysHighlight   = True
-              , promptBorderWidth = 1}
+              , promptBorderWidth = 0}
 
 -- | Make the screenkey window appear in front of other windows
 --

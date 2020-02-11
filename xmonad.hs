@@ -76,6 +76,11 @@ myEmacsQuery :: Query Bool
 myEmacsQuery = query "_emacs-wrapped" "Emacs" <||>
                query "emacs" "Emacs"
 
+-- | Firefox query
+--
+firefoxQuery :: Query Bool
+firefoxQuery = query "Navigator" "Firefox-esr"
+
 -- | Whether focus follows the mouse pointer.
 --
 myFocusFollowsMouse :: Bool
@@ -197,8 +202,8 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (query "gpartedbin" "GParted"))   -- expect this installed as main system
   , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"             (query "xosview" "XOsview2"))
   , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                  (query "dia-normal" "Dia-Normal"))
-  , (prefix "f"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)
-  , (prefix "b"         , "qutebrowser"                , homeRunOrRaise home myBrowser             myBrowserQuery)  -- qutebrowser working on nixos, not on plain nix
+  , (prefix "f"         , "firefox"                    , runOrRaiseNext "firefox"                  firefoxQuery)
+  , (prefix "b"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)  -- qutebrowser working on nixos, not on plain nix
   , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"            (query "TuxGuitar" "TuxGuitar"))
   , (prefix "l"         , "libre-office"               , nixRunOrRaise home "libreoffice"          libreOfficeQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")

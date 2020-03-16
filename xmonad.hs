@@ -175,6 +175,9 @@ xephyrQuery = query ".Xephyr-wrapped" "Xephyr"
 zenityQuery :: Query Bool
 zenityQuery = query "zenity" "Zenity"
 
+jitsiQuery :: Query Bool
+jitsiQuery = query "sun-awt-X11-XFramePeer" "Jitsi"
+
 -- | My keymap as (prefix keybindings, command description, command)
 --
 myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
@@ -202,10 +205,11 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (query "gpartedbin" "GParted"))   -- expect this installed as main system
   , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"             (query "xosview" "XOsview2"))
   , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                  (query "dia-normal" "Dia-Normal"))
-  , (prefix "f"         , "firefox"                    , runOrRaiseNext "firefox"                  firefoxQuery)
-  , (prefix "b"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)  -- qutebrowser working on nixos, not on plain nix
+  , (prefix "b"         , "firefox"                    , runOrRaiseNext "firefox"                  firefoxQuery)
+  , (prefix "f"         , "browser"                    , homeRunOrRaise home myBrowser             myBrowserQuery)  -- qutebrowser working on nixos, not on plain nix
   , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"            (query "TuxGuitar" "TuxGuitar"))
   , (prefix "l"         , "libre-office"               , nixRunOrRaise home "libreoffice"          libreOfficeQuery)
+  , (prefix "j"         , "jitsi"                      , nixRunOrRaise home "jitsi"                jitsiQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
   , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")
@@ -381,6 +385,7 @@ myManageHook = composeAll
     , myPdfReaderQuery myPdfReader                --> doShift workspaceBooks
     , vmQuery                                     --> doShift workspaceVM
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
+    , jitsiQuery                                  --> doShift workspaceRemote
     , manageMonitor screenKeyMonitor
     ]
   ------------------------------------------------------------------------

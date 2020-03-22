@@ -178,6 +178,9 @@ zenityQuery = query "zenity" "Zenity"
 jitsiQuery :: Query Bool
 jitsiQuery = query "sun-awt-X11-XFramePeer" "Jitsi"
 
+chromiumQuery :: Query Bool
+chromiumQuery = query "chromium" "Chromium"
+
 -- | My keymap as (prefix keybindings, command description, command)
 --
 myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
@@ -210,6 +213,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-t"      , "tuxguitar"                  , nixRunOrRaise home "tuxguitar"            (query "TuxGuitar" "TuxGuitar"))
   , (prefix "l"         , "libre-office"               , nixRunOrRaise home "libreoffice"          libreOfficeQuery)
   , (prefix "j"         , "jitsi"                      , nixRunOrRaise home "jitsi"                jitsiQuery)
+  , (prefix "c"         , "chromium"                   , nixRunOrRaise home "chromium"             chromiumQuery)
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
   , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")
@@ -386,6 +390,7 @@ myManageHook = composeAll
     , vmQuery                                     --> doShift workspaceVM
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
     , jitsiQuery                                  --> doShift workspaceRemote
+    , chromiumQuery                               --> doShift workspaceRemote
     , manageMonitor screenKeyMonitor
     ]
   ------------------------------------------------------------------------

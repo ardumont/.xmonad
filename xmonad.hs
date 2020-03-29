@@ -234,6 +234,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-f"      , "sound-increase"             , spawn "amixer set Master 5%+")
   , (prefix "M1-b"      , "sound-decrease"             , spawn "amixer set Master 5%-")
   , (prefix "M1-m"      , "sound-toggle"               , spawn "amixer set Master toggle")
+  , (prefix "C-m"       , "micro-mute"                 , spawn "amixer set Capture toggle")
   , (prefix "S-w"       , "switch-session"             , spawn "dm-tool switch-to-greeter")
   , (prefix "M1-e"      , "pdf-reader-prompt"          , launchApp myXPConfig myPdfReader)
   , (prefix "r"         , "exec"                       , runOrRaisePrompt myXPConfig)

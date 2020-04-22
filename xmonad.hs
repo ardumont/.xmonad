@@ -51,7 +51,7 @@ myPdfReader = "zathura"
 
 myPdfReaderQuery :: String -> Query Bool
 myPdfReaderQuery "apvlv" = query "apvlv" "Apvlv"
-myPdfReaderQuery "zathura" = query "zathura" "Zathura"
+myPdfReaderQuery "zathura" = query "org.pwmt.zathura" "Zathura"
 myPdfReaderQuery _ = error "Undefined"
 
 -- | My preferential browser

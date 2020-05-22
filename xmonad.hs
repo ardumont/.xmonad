@@ -181,6 +181,9 @@ jitsiQuery = query "sun-awt-X11-XFramePeer" "Jitsi"
 chromiumQuery :: Query Bool
 chromiumQuery = query "chromium" "Chromium"
 
+audaciousQuery :: Query Bool
+audaciousQuery = query "audacious" "Audacious"
+
 -- | My keymap as (prefix keybindings, command description, command)
 --
 myKeymapWithDescription :: String -> XConfig Layout -> [(String, String, X ())]
@@ -204,7 +207,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "C-e"       , "pdf-reader"                 , nixRunOrRaise home myPdfReader            (myPdfReaderQuery myPdfReader))
   , (prefix "C-i"       , "image-viewer"               , nixRunOrRaise home "feh"                  (query "feh" "feh"))
   , (prefix "d"         , "pinta"                      , nixRunOrRaise home "pinta"                (query "Pinta" "Pinta"))
-  , (prefix "C-a"       , "music-reader"               , nixRunOrRaise home "audacious"            (query "audacious" "Audacious"))
+  , (prefix "C-a"       , "music-reader"               , nixRunOrRaise home "audacious"            audaciousQuery)
   , (prefix "S-g"       , "gparted"                    , runOrRaiseNext "sudo gparted"             (query "gpartedbin" "GParted"))   -- expect this installed as main system
   , (prefix "C-S-x"     , "xosview"                    , nixRunOrRaise home "xosview2"             (query "xosview" "XOsview2"))
   , (prefix "C-S-g"     , "dia"                        , nixRunOrRaise home "dia"                  (query "dia-normal" "Dia-Normal"))
@@ -388,6 +391,7 @@ myManageHook = composeAll
     , myBrowserQuery                              --> doShift workspaceWeb
     , conkerorQuery                               --> doShift workspaceWeb
     , myPdfReaderQuery myPdfReader                --> doShift workspaceBooks
+    , audaciousQuery                              --> doShift workspaceBooks
     , vmQuery                                     --> doShift workspaceVM
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
     , jitsiQuery                                  --> doShift workspaceRemote

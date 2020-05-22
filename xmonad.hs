@@ -195,7 +195,6 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "M1-c"      , "mouse-click-at-point"       , mySpawn home "xdotool click 1")
   , (prefix "M1-d"      , "xdotool-prompt"             , launchApp myXPConfig "xdotool")
   , (prefix "e"         , "emacs"                      , homeRunOrRaise home "emacs"               myEmacsQuery)
-  , (prefix "S-c"       , "lighttable"                 , nixRunOrRaise home "light"                (query "lighttable" "LightTable"))
   , (prefix "C-r"       , "simplescreenrecorder"       , nixRunOrRaise home "simplescreenrecorder" (query "simplescreenrecorder" "SimpleScreenRecorder"))
   , (prefix "M1-S-x"    , "mcomix"                     , nixRunOrRaise home "mcomix"               (query "mcomix" "MComix"))
   , (prefix prefixKey   , "promote"                    , promote)  -- window manipulation
@@ -217,6 +216,7 @@ myKeymapWithDescription home conf@(XConfig { layoutHook = myLayoutHook
   , (prefix "l"         , "libre-office"               , nixRunOrRaise home "libreoffice"          libreOfficeQuery)
   , (prefix "j"         , "jitsi"                      , nixRunOrRaise home "jitsi"                jitsiQuery)
   , (prefix "c"         , "chromium"                   , nixRunOrRaise home "chromium"             chromiumQuery)
+  , (prefix "S-c"       , "chromium"                   , nixRunOrRaise home "chromium"             (dynamicCypressQuery home))
   , (prefix "C-S-e"     , "env"                        , spawnZenityCmd home "env")
   , (prefix "a"         , "date"                       , spawnZenityCmd home "date")
   , (prefix "S-k"       , "ssh-add-l"                  , spawnZenityCmd home "ssh-add -l")

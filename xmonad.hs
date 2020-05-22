@@ -358,6 +358,12 @@ myWorkspaces = sort [ workspaceDev
 ------------------------------------------------------------------------
 -- Window rules:
 
+-- Cypress opens a chromium browser with a different query
+dynamicCypressQuery :: String -> Query Bool
+dynamicCypressQuery home =
+  let path = "chromium (" ++ home ++ "/.config/Cypress/cy/production/browsers/chromium-stable/interactive)"
+  in query path "Chromium"
+
 -- Execute arbitrary actions and WindowSet manipulations when managing
 -- a new window. You can use this to, for example, always float a
 -- particular program, or have a client always appear on a particular
@@ -370,8 +376,8 @@ myWorkspaces = sort [ workspaceDev
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'appName' (`resource`) are used below.
 --
-myManageHook :: Query (Endo WindowSet)
-myManageHook = composeAll
+myManageHook :: String -> Query (Endo WindowSet)
+myManageHook home = composeAll
     [ isFullscreen                                --> doFullFloat
     , vlcQuery                                    --> doFullFloat
     , xephyrQuery                                 --> doShift workspaceFloat >> doFloat
@@ -386,6 +392,7 @@ myManageHook = composeAll
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
     , jitsiQuery                                  --> doShift workspaceRemote
     , chromiumQuery                               --> doShift workspaceRemote
+    , dynamicCypressQuery home                    --> doShift workspaceDev
     , manageMonitor screenKeyMonitor
     ]
   ------------------------------------------------------------------------
@@ -483,7 +490,7 @@ main = do
                 , keys               = myKeys home
                 , mouseBindings      = myMouseBindings
                 , layoutHook         = smartBorders .avoidStruts $ myLayout
-                , manageHook         = manageDocks <+> myManageHook
+                , manageHook         = manageDocks <+> myManageHook home
                 -- Status bars and logging
                 -- Perform an arbitrary action on each internal state change
                 -- or X event.

@@ -336,33 +336,23 @@ myLayout = tiled ||| Mirror tiled ||| Full
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
 
-workspaceEmacs, workspaceTerminal, workspaceWeb, workspaceCode, workspaceIrc, workspaceIde, workspaceFloat, workspaceBooks, workspaceDb , workspaceVM, workspaceDevVM, workspaceRemote :: String
-workspaceEmacs    = "01:emacs"
+workspaceDev, workspaceTerminal, workspaceWeb, workspaceMisc, workspaceRemote, workspaceVM, workspaceFloat :: String
+workspaceDev      = "01:dev"
 workspaceTerminal = "02:terminal"
 workspaceWeb      = "03:web"
-workspaceCode     = "04:code"
-workspaceIrc      = "05:irc"
-workspaceDb       = "06:db"
-workspaceFloat    = "07:ide"
-workspaceVM       = "08:vm"
-workspaceDevVM    = "09:dev-vm"
-workspaceBooks    = "10:books"
-workspaceIde      = "11:ide"
-workspaceRemote   = "12:remote"
+workspaceMisc     = "04:misc"
+workspaceRemote   = "05:remote"
+workspaceVM       = "06:vm"
+workspaceFloat    = "07:float"
 
 myWorkspaces :: [String]
-myWorkspaces = sort [ workspaceEmacs
+myWorkspaces = sort [ workspaceDev
                     , workspaceTerminal
                     , workspaceWeb
-                    , workspaceCode
-                    , workspaceIrc
-                    , workspaceVM
-                    , workspaceDevVM
-                    , workspaceIde
-                    , workspaceFloat
-                    , workspaceBooks
-                    , workspaceDb
+                    , workspaceMisc
                     , workspaceRemote
+                    , workspaceVM
+                    , workspaceFloat
                     ]
 
 ------------------------------------------------------------------------
@@ -386,12 +376,12 @@ myManageHook = composeAll
     , vlcQuery                                    --> doFullFloat
     , xephyrQuery                                 --> doShift workspaceFloat >> doFloat
     , zenityQuery                                 --> doFloat
-    , myEmacsQuery                                --> doShift workspaceEmacs
+    , myEmacsQuery                                --> doShift workspaceDev
     , myTerminalQuery                             --> doShift workspaceTerminal
     , myBrowserQuery                              --> doShift workspaceWeb
     , conkerorQuery                               --> doShift workspaceWeb
-    , myPdfReaderQuery myPdfReader                --> doShift workspaceBooks
-    , audaciousQuery                              --> doShift workspaceBooks
+    , myPdfReaderQuery myPdfReader                --> doShift workspaceMisc
+    , audaciousQuery                              --> doShift workspaceMisc
     , vmQuery                                     --> doShift workspaceVM
     , className =? ".remmina-wrapped"             --> doShift workspaceRemote
     , jitsiQuery                                  --> doShift workspaceRemote

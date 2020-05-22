@@ -384,6 +384,7 @@ myManageHook home = composeAll
     , zenityQuery                                 --> doFloat
     , myEmacsQuery                                --> doShift workspaceDev
     , myTerminalQuery                             --> doShift workspaceTerminal
+    , query "cypress" "Cypress"                   --> doShift workspaceTerminal
     , myBrowserQuery                              --> doShift workspaceWeb
     , conkerorQuery                               --> doShift workspaceWeb
     , myPdfReaderQuery myPdfReader                --> doShift workspaceMisc
